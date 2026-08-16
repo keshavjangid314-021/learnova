@@ -1,125 +1,152 @@
 import streamlit as st
 
-# 1. Page Configuration (Dark Theme)
-st.set_page_config(page_title="Learnova | CBSE Physics AI", page_icon="⚡", layout="wide")
+# 1. Page Configuration
+st.set_page_config(
+    page_title="Learnova | CBSE Class 12 Physics AI",
+    page_icon="⚡",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 
+# 2. UI Security & Dark/Light Mode Contrast Fix
 st.markdown("""
 <style>
-    .stApp { background-color: #0E1117; color: #FFFFFF; }
-    h1, h2, h3, h4 { color: #58A6FF !important; }
-    .stChatMessage { background-color: #161B22; border-radius: 10px; margin-bottom: 10px; }
+    /* Security: Hide Edit/Deploy Toolbar & Main Menu from Users */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    .stAppDeployButton {display:none;}
+    div[data-testid="stToolbar"] {visibility: hidden !important;}
+
+    /* Adaptive High Contrast Theme Fix */
+    .stApp {
+        font-family: 'Segoe UI', Roboto, sans-serif;
+    }
+    
+    .stChatMessage {
+        border-radius: 12px;
+        padding: 12px;
+        margin-bottom: 12px;
+        border: 1px solid rgba(128, 128, 128, 0.3);
+    }
+
+    /* Force text visibility across both Dark & Light system themes */
+    p, h1, h2, h3, h4, span, div {
+        color: var(--text-color);
+    }
 </style>
 """, unsafe_allow_html=True)
 
-st.title("⚡ Learnova AI")
-st.caption("Class 12 CBSE Physics Mini-ChatGPT Tutor")
+# 3. Sidebar
+with st.sidebar:
+    st.title("⚡ Learnova AI")
+    st.subheader("Class 12 CBSE Physics Tutor")
+    st.markdown("---")
+    st.markdown("### 🎓 Supported Topics")
+    st.write("1. 🧲 **Solenoid & Electromagnetism**")
+    st.write("2. 🌊 **Huygens Wave Optics**")
+    st.write("3. ⚡ **Kirchhoff's Circuit Laws**")
+    st.markdown("---")
+    st.info("💡 **Tip:** Ask questions in any way (e.g., 'how solenoid works', 'formula of kirchhoff', 'wavefront definition').")
 
-# 2. About Learnova & Quick Formulas Header
-with st.expander("ℹ️ About Learnova & Formula Cheat-Sheet", expanded=False):
-    st.write("""
-    **Learnova** provides instant CBSE Class 12 NCERT physics answers paired with live 3D PhET simulations directly in the chat!
-    
-    * **Solenoid Magnetic Field:** $B = \\mu_0 n I$
-    * **Huygens' Wave Velocity:** $v = f \\lambda$
-    * **Kirchhoff's Junction Rule (KCL):** $\\sum I = 0$ *(Charge Conservation)*
-    * **Kirchhoff's Loop Rule (KVL):** $\\sum \\Delta V = 0$ *(Energy Conservation)*
-    """)
+# 4. App Header
+st.title("⚡ Learnova Physics AI Tutor")
+st.caption("CBSE Class 12 Physics Assistant with Live Interactive 3D Virtual Labs")
 
-# 3. Comprehensive CBSE Topic Knowledge Base
+# 5. Formula Cheat-Sheet
+with st.expander("📌 Quick Formula Cheat-Sheet & Key Concepts", expanded=False):
+    col1, col2 = st.columns(2)
+    with col1:
+        st.markdown("**Solenoid Magnetic Field:** $B = \\mu_0 n I$")
+        st.markdown("**Wavefront Speed:** $v = f \\lambda$")
+    with col2:
+        st.markdown("**Kirchhoff Junction Rule (KCL):** $\\sum I = 0$ *(Charge Conservation)*")
+        st.markdown("**Kirchhoff Loop Rule (KVL):** $\\sum \\Delta V = 0$ *(Energy Conservation)*")
+
+# 6. Knowledge Base with Flexible Query Keywords & Exact Simulations
 KNOWLEDGE_BASE = {
     "solenoid": {
+        "keywords": ["solenoid", "electromagnet", "coil field", "magnetic field of coil", "how solenoid work", "use of solenoid", "formula of solenoid"],
         "title": "🧲 Solenoid & Magnetic Field (Class 12 CBSE)",
         "content": """
-**NCERT Definition:** A solenoid is a long helical coil of insulated copper wire tightly wound around a cylindrical frame.
+**NCERT Definition:** A solenoid is a long helical coil of insulated copper wire wound tightly in the shape of a cylinder.
 
-**Key CBSE Theory Points:**
-* **Internal Field:** Magnetic field lines inside a long, tightly wound solenoid are straight, parallel, and uniform.
-* **External Field:** Outside the solenoid, magnetic field lines are weak and spread out, effectively considered zero.
-* **Magnetic Equivalence:** A current-carrying solenoid produces a magnetic field pattern identical to a **Bar Magnet** with North and South poles.
+**Working & Core Concepts:**
+- When an electric current passes through the coil, it generates a uniform magnetic field along its axis.
+- **Inside Field:** Strong, uniform, and parallel magnetic field lines.
+- **Outside Field:** Extremely weak/negligible field.
+- **Behavior:** Acts as a cylindrical **Bar Magnet** with distinct North and South magnetic poles.
 
-**NCERT Formula:**
+**Formula:**
 $$B = \\mu_0 n I$$
-*(where $B$ = magnetic field strength, $\\mu_0 = 4\\pi \\times 10^{-7} \\text{ T}\\cdot\\text{m/A}$, $n = N/L$ turns per unit length, $I$ = electric current)*
+*(where $\\mu_0 = 4\\pi \\times 10^{-7} \\text{ T}\\cdot\\text{m/A}$, $n = N/L$ turns per unit length, $I$ is current)*
         """,
-        "phet": "https://phet.colorado.edu/sims/html/faradays-law/latest/faradays-law_all.html"
+        "phet": "https://phet.colorado.edu/sims/html/magnets-and-electromagnets/latest/magnets-and-electromagnets_all.html"
     },
     "huygens": {
-        "title": "🌊 Huygens' Principle & Wavefronts (Class 12 CBSE)",
+        "keywords": ["huygens", "wavefront", "wave optics", "secondary wavelet", "reflection wave", "refraction wave"],
+        "title": "🌊 Huygens' Wave Principle & Wavefronts (Class 12 CBSE)",
         "content": """
-**NCERT Definition:** A **wavefront** is defined as the locus of all points in a medium vibrating in the exact same phase.
+**NCERT Definition:** A **wavefront** is defined as the locus of all points vibrating in the same phase.
 
-**Core Postulates of Huygens' Principle:**
-1. Every point on a given primary wavefront acts as a fresh source of new disturbance, emitting secondary wavelets.
-2. Secondary wavelets spread out in all directions with the speed of light in that specific medium.
-3. The new wavefront at any later time is formed by taking the forward envelope (common tangential surface) touching all these secondary wavelets.
-
-**Types of Wavefronts:**
-* **Spherical:** Emitted by a point source at a finite distance.
-* **Cylindrical:** Emitted by a line source (narrow slit).
-* **Plane:** Formed when a source is located at infinity (e.g., sunlight entering Earth).
+**Core Postulates:**
+1. Every point on a primary wavefront acts as a fresh source of secondary wavelets.
+2. These wavelets spread out in all directions with the speed of light in that medium.
+3. The new wavefront is the forward envelope touching these secondary wavelets.
         """,
         "phet": "https://phet.colorado.edu/sims/html/wave-interference/latest/wave-interference_all.html"
     },
     "kirchhoff": {
+        "keywords": ["kirchhoff", "kcl", "kvl", "junction rule", "loop rule", "circuit rule", "current law", "voltage law"],
         "title": "⚡ Kirchhoff's Circuit Rules (Class 12 CBSE)",
         "content": """
-**1. Kirchhoff's First Rule / Junction Rule (KCL):**
-* **Statement:** The algebraic sum of currents meeting at any electric junction in a closed circuit is zero ($\sum I = 0$).
-* **Conservation Law:** Based strictly on the **Law of Conservation of Electric Charge**.
+**1. Junction Rule (KCL):** The algebraic sum of currents meeting at any junction in a closed circuit is zero ($\\sum I = 0$). Based on **Conservation of Charge**.
 
-**2. Kirchhoff's Second Rule / Loop Rule (KVL):**
-* **Statement:** The algebraic sum of potential differences (emfs and $IR$ products) around any closed loop is zero ($\sum \\Delta V = 0$).
-* **Conservation Law:** Based strictly on the **Law of Conservation of Energy**.
+**2. Loop Rule (KVL):** The algebraic sum of changes in potential around any closed circuit loop is zero ($\\sum \\Delta V = 0$). Based on **Conservation of Energy**.
         """,
         "phet": "https://phet.colorado.edu/sims/html/circuit-construction-kit-dc/latest/circuit-construction-kit-dc_all.html"
     }
 }
 
-# 4. Chat Session History Initialization
+# 7. Chat History Logic
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = [
-        {"role": "assistant", "type": "text", "text": "👋 Hi! I am **Learnova**. Ask me questions about **Solenoid**, **Huygens Principle**, or **Kirchhoff Laws** to get CBSE theory answers along with 3D PhET interactive simulations!"}
+        {"role": "assistant", "type": "text", "text": "👋 Welcome to **Learnova**! Ask me any question on **Solenoid**, **Huygens Principle**, or **Kirchhoff's Laws** in your own words to get CBSE notes and live 3D PhET simulations."}
     ]
 
-# Render past chat history
-for message in st.session_state.chat_history:
-    with st.chat_message(message["role"]):
-        if message["type"] == "text":
-            st.markdown(message["text"])
-        elif message["type"] == "phet":
-            st.components.v1.iframe(message["url"], height=420)
+for msg in st.session_state.chat_history:
+    with st.chat_message(msg["role"]):
+        if msg["type"] == "text":
+            st.markdown(msg["text"])
+        elif msg["type"] == "phet":
+            st.components.v1.iframe(msg["url"], height=450)
 
-# 5. Handle User Chat Input
-user_input = st.chat_input("Ask Learnova (e.g., 'What is Solenoid?')")
+# 8. Flexible Input Processing
+user_input = st.chat_input("Ask Learnova AI (e.g., 'How does a solenoid work?')")
 
 if user_input:
-    # Display user input
     st.chat_message("user").markdown(user_input)
     st.session_state.chat_history.append({"role": "user", "type": "text", "text": user_input})
     
     query = user_input.lower()
-    matched_topic = None
+    matched = None
     
-    # Check matching topic
-    if "solenoid" in query or "magnetic field" in query:
-        matched_topic = KNOWLEDGE_BASE["solenoid"]
-    elif "huygens" in query or "wavefront" in query or "wave optics" in query:
-        matched_topic = KNOWLEDGE_BASE["huygens"]
-    elif "kirchhoff" in query or "kcl" in query or "kvl" in query or "junction" in query or "loop rule" in query:
-        matched_topic = KNOWLEDGE_BASE["kirchhoff"]
+    # Keyword-based flexible matching
+    for key, data in KNOWLEDGE_BASE.items():
+        if any(kw in query for kw in data["keywords"]):
+            matched = data
+            break
 
     with st.chat_message("assistant"):
-        if matched_topic:
-            # Output text theory response
-            response_text = f"### {matched_topic['title']}\n\n{matched_topic['content']}"
-            st.markdown(response_text)
-            st.session_state.chat_history.append({"role": "assistant", "type": "text", "text": response_text})
+        if matched:
+            response = f"### {matched['title']}\n\n{matched['content']}"
+            st.markdown(response)
+            st.session_state.chat_history.append({"role": "assistant", "type": "text", "text": response})
             
-            # Output PhET 3D Embed directly inside chat
-            st.write("🎮 **Interactive 3D Simulation:**")
-            st.components.v1.iframe(matched_topic["phet"], height=420)
-            st.session_state.chat_history.append({"role": "assistant", "type": "phet", "url": matched_topic["phet"]})
+            st.markdown("🎮 **Interactive 3D Physics Simulation:**")
+            st.components.v1.iframe(matched["phet"], height=450)
+            st.session_state.chat_history.append({"role": "assistant", "type": "phet", "url": matched["phet"]})
         else:
-            fallback = "I focus on Class 12 CBSE Physics topics! Try asking me about **Solenoid**, **Huygens Wavefronts**, or **Kirchhoff Circuit Rules**."
+            fallback = "I am trained on CBSE Class 12 Physics core topics. Please ask about **Solenoid / Electromagnets**, **Huygens Principle / Wavefronts**, or **Kirchhoff's Circuit Laws**!"
             st.markdown(fallback)
             st.session_state.chat_history.append({"role": "assistant", "type": "text", "text": fallback})
