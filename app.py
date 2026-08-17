@@ -8,7 +8,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. Custom CSS Styling & Cleanup (Hides Badges & Mask External Links in Simulations)
+# 2. Custom CSS Styling & Cleanup
 st.markdown("""
 <style>
 #MainMenu {visibility: hidden;}
@@ -37,7 +37,7 @@ div[aria-label="Streamlit status"] {
 
 .sim-container iframe {
     width: 100%;
-    height: 530px; /* Overflow to crop bottom links */
+    height: 530px;
     border: none;
     margin-top: -5px;
 }
@@ -48,7 +48,7 @@ div[aria-label="Streamlit status"] {
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# 4. Sidebar History Setup (ChatGPT Style)
+# 4. Sidebar History Setup
 with st.sidebar:
     st.title("💬 Chat History")
     if st.button("➕ New Chat"):
@@ -63,7 +63,7 @@ with st.sidebar:
 st.title("⚡ Learnova Science AI Tutor")
 st.caption("CBSE Class 11 & 12 Interactive Science Assistant with Virtual 3D Labs")
 
-# 6. Welcome Banner & Available Topics Overview (Displayed on First Load)
+# 6. Welcome Banner
 if len(st.session_state.messages) == 0:
     st.info("""
     👋 **Welcome to Learnova Science AI!** You can ask questions and explore interactive 3D simulations on the following topics:
@@ -72,8 +72,9 @@ if len(st.session_state.messages) == 0:
       * 🧲 **Solenoid & Electromagnetism** (*"What is solenoid?"* / *"How does solenoid work?"*)
       * ⚡ **Electromagnetic Induction** (*"Explain Electromagnetic Induction"* / *"Faraday's Law"*)
       * 🔋 **Circuit Construction** (*"Explain Electric Circuit"* / *"Ohm's Law & Circuits"*)
+      * ⚡ **Kirchhoff's Laws** (*"Explain Kirchhoff's Laws"* / *"KCL and KVL"*)
       * ⚛️ **Charges and Fields** (*"What is Coulomb's Law?"* / *"Electric Charges and Fields"*)
-      * 🌊 **Huygens' Principle** & ⚡ **Kirchhoff's Laws**
+      * 🌊 **Huygens' Principle**
 
     * **Chemistry Topics:**
       * 🧪 **pH Scale, Acids & Bases** (*"What is pH scale?"* / *"Explain Acid and Base"*)
@@ -88,8 +89,6 @@ for message in st.session_state.messages:
 # 8. Smart Intent-Based Response Generator
 def generate_response(prompt):
     text = prompt.lower().strip()
-    
-    # ------------------ PHYSICS TOPICS ------------------
     
     # --- Solenoid ---
     if "solenoid" in text:
@@ -114,9 +113,33 @@ A **solenoid** is a long helical coil of insulated copper wire wound tightly aro
 3. **Polarity:** Clockwise current side = **South Pole** | Anti-clockwise current side = **North Pole**
 
 ---
-### 🔬 Interactive 3D Solenoid Simulation
+### 🔬 Interactive 3D Magnets & Electromagnet Simulation
 <div class="sim-container">
-    <iframe src="https://phet.colorado.edu/sims/html/faradays-law/latest/faradays-law_all.html"></iframe>
+    <iframe src="https://phet.colorado.edu/sims/html/magnets-and-electromagnets/latest/magnets-and-electromagnets_all.html"></iframe>
+</div>
+"""
+
+    # --- Kirchhoff's Laws ---
+    elif "kirchhoff" in text or "kcl" in text or "kvl" in text or "junction rule" in text or "loop rule" in text:
+        return """
+### ⚡ Kirchhoff's Circuit Laws
+
+Kirchhoff's laws are fundamental rules used to analyze complex electrical circuits:
+
+1. **Kirchhoff's Current Law (KCL / Junction Rule):**
+   * **Statement:** The algebraic sum of all electric currents meeting at any junction in an electrical circuit is zero.
+   * **Formula:** $$\\sum I = 0$$
+   * **Law:** Based on the **Law of Conservation of Charge**.
+
+2. **Kirchhoff's Voltage Law (KVL / Loop Rule):**
+   * **Statement:** The algebraic sum of all potential differences (EMFs and voltage drops across resistors) in any closed loop of a circuit is zero.
+   * **Formula:** $$\\sum V = 0 \\quad \\text{or} \\quad \\sum \\mathcal{E} = \\sum I R$$
+   * **Law:** Based on the **Law of Conservation of Energy**.
+
+---
+### 🔬 Interactive Circuit Construction Lab (Test KCL & KVL)
+<div class="sim-container">
+    <iframe src="https://phet.colorado.edu/sims/html/circuit-construction-kit-dc/latest/circuit-construction-kit-dc_all.html"></iframe>
 </div>
 """
 
@@ -144,7 +167,7 @@ A **solenoid** is a long helical coil of insulated copper wire wound tightly aro
 ### 🔋 Circuit Construction & Electrical Laws
 
 * **Ohm's Law:** $V = I R$ (Potential difference is directly proportional to current).
-* **Series Circuit:** Total resistance $R_eq = R_1 + R_2 + R_3$. Current remains same across all components.
+* **Series Circuit:** Total resistance $R_{eq} = R_1 + R_2 + R_3$. Current remains same across all components.
 * **Parallel Circuit:** Total resistance $\\frac{1}{R_{eq}} = \\frac{1}{R_1} + \\frac{1}{R_2} + \\frac{1}{R_3}$. Voltage remains same across branches.
 
 ---
@@ -161,7 +184,6 @@ A **solenoid** is a long helical coil of insulated copper wire wound tightly aro
 
 * **Coulomb's Law:** The electrostatic force between two point charges is given by:
   $$F = k \\frac{|q_1 q_2|}{r^2}$$
-  *(where $k = \\frac{1}{4\\pi \\varepsilon_0} \\approx 8.99 \\times 10^9 \\text{ N}\\cdot\\text{m}^2/\\text{C}^2$)*
 * **Electric Field ($E$):** Force per unit charge ($E = \\frac{F}{q}$). Field lines originate from positive charges and terminate at negative charges.
 
 ---
@@ -178,16 +200,6 @@ A **solenoid** is a long helical coil of insulated copper wire wound tightly aro
 Every point on a primary wavefront acts as a fresh source of secondary wavelets, spreading out in all directions with the speed of light in that medium.
 """
 
-    # --- Kirchhoff's Laws ---
-    elif "kirchhoff" in text or "kcl" in text or "kvl" in text:
-        return """
-### ⚡ Kirchhoff's Circuit Laws
-1. **Kirchhoff's Current Law (KCL):** $\\sum I = 0$ (Conservation of Charge)
-2. **Kirchhoff's Voltage Law (KVL):** $\\sum V = 0$ (Conservation of Energy)
-"""
-
-    # ------------------ CHEMISTRY TOPICS ------------------
-
     # --- pH Scale, Acid & Base ---
     elif "ph" in text or "acid" in text or "base" in text:
         return """
@@ -196,10 +208,9 @@ Every point on a primary wavefront acts as a fresh source of secondary wavelets,
 * **pH Scale Definition:** A logarithmic scale used to measure the hydrogen ion concentration $[H^+]$ of a solution:
   $$\\text{pH} = -\\log_{10}[H^+]$$
 * **Values:**
-  * **pH < 7:** Acidic (Higher $[H^+]$)
-  * **pH = 7:** Neutral (e.g., Pure Water)
-  * **pH > 7:** Basic / Alkaline (Higher $[OH^-]$)
-* **Neutralization Reaction:** $\\text{Acid} + \\text{Base} \\rightarrow \\text{Salt} + \\text{Water}$
+  * **pH < 7:** Acidic
+  * **pH = 7:** Neutral
+  * **pH > 7:** Basic / Alkaline
 
 ---
 ### 🔬 Interactive pH Scale Virtual Lab
@@ -213,13 +224,11 @@ Every point on a primary wavefront acts as a fresh source of secondary wavelets,
         return """
 ### 💎 Molecule Shapes & VSEPR Theory
 
-**VSEPR (Valence Shell Electron Pair Repulsion) Theory** predicts the 3D geometry of molecules based on electron pair repulsions around the central atom:
+**VSEPR Theory** predicts 3D molecular geometry based on electron pair repulsion:
 
-* **Linear:** $180^\circ$ bond angle (e.g., $\text{CO}_2$)
-* **Trigonal Planar:** $120^\circ$ bond angle (e.g., $\text{BF}_3$)
-* **Tetrahedral:** $109.5^\circ$ bond angle (e.g., $\text{CH}_4$)
-* **Trigonal Bipyramidal:** $90^\circ$ & $120^\circ$ angles (e.g., $\text{PCl}_5$)
-* **Octahedral:** $90^\circ$ bond angle (e.g., $\text{SF}_6$)
+* **Linear:** $180^\\circ$ (e.g., $\\text{CO}_2$)
+* **Trigonal Planar:** $120^\\circ$ (e.g., $\\text{BF}_3$)
+* **Tetrahedral:** $109.5^\\circ$ (e.g., $\\text{CH}_4$)
 
 ---
 ### 🔬 Interactive 3D Molecule Shapes Simulator
@@ -233,17 +242,16 @@ Every point on a primary wavefront acts as a fresh source of secondary wavelets,
         return f"""
 I received your query: **"{prompt}"**
 
-Currently, I am specialized in CBSE Science (Physics & Chemistry) topics. Try asking:
+Try asking:
 * *"What is a solenoid?"* or *"How does a solenoid work?"*
+* *"Explain Kirchhoff's Laws"*
 * *"Explain Electromagnetic Induction"*
-* *"Explain Electric Circuit"*
-* *"What is Coulomb's Law?"*
 * *"What is pH scale?"*
 * *"Explain Molecule Shapes VSEPR Theory"*
 """
 
 # 9. User Input Handling
-if user_prompt := st.chat_input("Ask Learnova Science AI (e.g., 'What is pH scale?' or 'How does solenoid work?')..."):
+if user_prompt := st.chat_input("Ask Learnova Science AI..."):
     st.session_state.messages.append({"role": "user", "content": user_prompt})
     with st.chat_message("user"):
         st.markdown(user_prompt)
