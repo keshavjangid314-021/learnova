@@ -8,14 +8,15 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. CSS Styling & Cleanup (Hides External Links, Badges, & Crops Simulation Bottom)
+# 2. CSS Styling & Elements Cleanup (Hides Crown, Blue Icons, and External Links)
 st.markdown("""
 <style>
+/* Security & Cleanup: Hide Streamlit Default UI & External Badges */
 #MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
 header {visibility: hidden;}
 
-/* Hide Streamlit Community & Floating Badges */
+/* Hide Floating Red/Pink Crown Badge & Accessibility Icons */
 div[class*="viewerBadge"], 
 div[class*="styles_viewerBadge"],
 button[title*="Streamlit Community Cloud"],
@@ -26,112 +27,148 @@ div[aria-label="Streamlit status"] {
     visibility: hidden !important;
 }
 
-/* Crop PhET External Links at the bottom */
+/* Container for Simulation to Hide Bottom Links */
 .sim-container {
     position: relative;
     width: 100%;
-    height: 480px;
+    height: 500px;
     overflow: hidden;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 .sim-container iframe {
     width: 100%;
-    height: 530px; /* Slight overflow to hide external links */
+    height: 540px; /* Slight overflow to crop external bottom links */
     border: none;
     margin-top: -5px;
+}
+
+/* Chat Styling Adjustments */
+.stChatMessage {
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 10px;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# 3. Session State Initialization
+# 3. Main Header
+st.title("⚡ Learnova Physics AI Tutor")
+st.caption("CBSE Class 12 Physics Assistant with Live Interactive 3D Virtual Labs")
+
+# 4. Expandable Cheat-Sheet & Topics List
+with st.expander("📌 Quick Formula Cheat-Sheet & Key Topics"):
+    st.markdown("""
+    * **Electromagnetism:** Solenoid ($B = \mu_0 n I$), Toroid, Ampere's Circuital Law
+    * **Wave Optics:** Huygens Principle, Young's Double Slit Experiment ($y = \frac{n\lambda D}{d}$)
+    * **Current Electricity:** Kirchhoff's Current & Voltage Laws ($\sum I = 0$, $\sum V = 0$)
+    """)
+
+# 5. Welcome Banner
+st.info("🤖 **Welcome to Learnova!** Ask me specific questions like *'What is a solenoid?'*, *'How does a solenoid work?'*, *'Explain Huygens Principle'*, or *'Kirchhoff's Laws'*. ")
+
+# 6. Chat History Management
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# 4. Sidebar History Setup (ChatGPT Style)
-with st.sidebar:
-    st.title("💬 Chat History")
-    if st.button("➕ New Chat"):
-        st.session_state.messages = []
-        st.rerun()
-    st.markdown("---")
-    
-    # Render past questions in sidebar
-    for idx, msg in enumerate(st.session_state.messages):
-        if msg["role"] == "user":
-            st.caption(f"📌 {msg['content'][:25]}...")
-
-# 5. Main Header
-st.title("⚡ Learnova Physics AI Tutor")
-st.caption("CBSE Class 12 Physics Assistant")
-
-# 6. Display Active Chat Messages
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"], unsafe_allow_html=True)
 
-# 7. Intent-Based Response Generator
+# 7. Response Logic Function
 def generate_response(prompt):
     text = prompt.lower().strip()
     
-    # Query Type 1: Definition / "What is"
-    if "what is" in text or "define" in text or "definition" in text:
-        if "solenoid" in text:
-            return """
+    # --- TOPIC: SOLENOID (Definition / Basic Info) ---
+    if "what is solenoid" in text or "define solenoid" in text or "solenoid definition" in text:
+        return """
 ### 🧲 What is a Solenoid?
 
-A **solenoid** is a long helical coil of insulated copper wire wound tightly around a cylindrical frame. When current flows through it, it produces a uniform magnetic field inside its core, behaving like a bar magnet.
+A **solenoid** is a long helical coil of insulated copper wire wound tightly around a cylindrical core. When an electric current passes through it, it produces a uniform magnetic field inside its core, behaving similarly to a bar magnet.
 
-* **Formula:** $B = \mu_0 n I$
+* **Magnetic Field Inside:** $B = \mu_0 n I$
   * $\mu_0$ = Permeability of free space ($4\pi \times 10^{-7} \text{ T}\cdot\text{m/A}$)
-  * $n$ = Turns per unit length ($N/L$)
-  * $I$ = Current in Amperes
-* **Key Feature:** Magnetic field inside is **strong and uniform**, while outside it is close to **zero**.
+  * $n$ = Number of turns per unit length ($n = N/L$)
+  * $I$ = Current flowing through the wire
+* **Properties:**
+  * Field inside is **strong, uniform, and parallel** to the axis.
+  * Field outside the solenoid is very weak and considered **zero**.
 """
-        elif "huygen" in text:
-            return "### 🌊 Huygens' Principle\nEvery point on a primary wavefront acts as a fresh source of secondary wavelets, spreading out in all directions with the speed of light."
-        elif "kirchhoff" in text:
-            return "### ⚡ Kirchhoff's Laws\n* **KCL (Junction Rule):** Total current entering a junction equals total current leaving ($\sum I = 0$).\n* **KVL (Loop Rule):** Sum of all potential differences in a closed loop is zero ($\sum V = 0$)."
 
-    # Query Type 2: Mechanism / "How it works"
-    elif "how" in text or "work" in text or "working" in text:
-        if "solenoid" in text:
-            return """
-### ⚙️ How a Solenoid Works (Working Principle)
+    # --- TOPIC: SOLENOID (Working Mechanism) ---
+    elif "how it works" in text or "how solenoid works" in text or "working of solenoid" in text or "working mechanism" in text:
+        return """
+### ⚙️ How a Solenoid Works (Working Mechanism)
 
-1. **Magnetic Field Generation:** Direct current (DC) flowing through each loop generates a magnetic field around the wire via the Right-Hand Thumb Rule.
-2. **Field Alignment:** Individual circular fields sum up along the central axis of the cylinder to form a strong, directional magnetic field line.
-3. **Polarity:** 
-   * Clockwise current side = **South Pole**
-   * Anti-clockwise current side = **North Pole**
+1. **Current Flow & Magnetic Field Generation:** 
+   When direct current (DC) flows through each circular loop of the helical coil, it creates a magnetic field around each loop (Right-Hand Thumb Rule).
+
+2. **Vector Addition of Fields:** 
+   The magnetic fields of individual circular turns combine along the central line of the cylinder to create a strong, straight, uniform magnetic field inside the coil.
+
+3. **Polarity Formation:** 
+   * The end where current flows **clockwise** acts as the **South Pole**.
+   * The end where current flows **anti-clockwise** acts as the **North Pole**.
 
 ---
-### 🔬 Interactive 3D Simulation
+### 🔬 Interactive 3D Solenoid & Electromagnet Simulation
+Adjust current and turns in the simulation below to observe magnetic field vectors in real time:
+
 <div class="sim-container">
     <iframe src="https://phet.colorado.edu/sims/html/faradays-law/latest/faradays-law_all.html"></iframe>
 </div>
 """
-        elif "huygen" in text:
-            return "### ⚙️ How Huygens' Principle Works\nBy constructing forward envelopes (tangential surfaces) touching the secondary wavelets, we can predict the exact new position of a wavefront at time $t$."
 
-    # General Fallback Response
-    return f"""
-I received your query: **"{prompt}"**
+    # --- TOPIC: HUYGENS PRINCIPLE ---
+    elif "huygen" in text or "wavefront" in text:
+        return """
+### 🌊 Huygens' Principle of Wavefronts
 
-Try asking specific questions like:
-* *"What is a solenoid?"* (For definitions & formulas)
-* *"How does a solenoid work?"* (For working mechanism & 3D Lab)
-* *"What is Kirchhoff's Law?"*
+1. **Primary Wavefront:** Every point on a given primary wavefront acts as a fresh source of secondary disturbance, sending out spherical wavelets.
+2. **Speed of Wavelets:** These secondary wavelets spread out in all directions with the speed of light in that medium.
+3. **Secondary Wavefront:** The forward envelope or tangential surface touching these secondary wavelets gives the new position of the wavefront at a later time $t$.
+
+> **CBSE Tip:** Use Huygens' principle to prove the **Law of Reflection** ($\theta_i = \theta_r$) and **Law of Refraction** ($\frac{\sin i}{\sin r} = \frac{v_1}{v_2}$).
 """
 
-# 8. Input Processing
-if user_prompt := st.chat_input("Ask Learnova AI..."):
+    # --- TOPIC: KIRCHHOFF'S LAWS ---
+    elif "kirchhoff" in text or "kvl" in text or "kcl" in text:
+        return """
+### ⚡ Kirchhoff's Circuit Laws
+
+1. **Kirchhoff's Current Law (KCL / Junction Rule):** 
+   The algebraic sum of all electric currents entering and leaving any junction in an electrical circuit is equal to zero.
+   $$\sum I = 0$$
+   *(Based on the Law of Conservation of Charge)*
+
+2. **Kirchhoff's Voltage Law (KVL / Loop Rule):** 
+   The algebraic sum of all potential differences (EMF and voltage drops) around any closed loop in a circuit is zero.
+   $$\sum V = 0$$
+   *(Based on the Law of Conservation of Energy)*
+"""
+
+    # --- FALLBACK RESPONSE ---
+    else:
+        return f"""
+I received your query: **"{prompt}"**
+
+Currently, I am specialized in CBSE Class 12 Physics core concepts. Try asking:
+* *"What is a solenoid?"*
+* *"How does a solenoid work?"*
+* *"Explain Huygens Principle"*
+* *"State Kirchhoff's Laws"*
+"""
+
+# 8. User Input & Processing
+if user_prompt := st.chat_input("Ask Learnova AI (e.g., 'What is solenoid?' or 'How it works?')"):
+    # Display User Message
     st.session_state.messages.append({"role": "user", "content": user_prompt})
     with st.chat_message("user"):
         st.markdown(user_prompt)
 
-    response = generate_response(user_prompt)
-    st.session_state.messages.append({"role": "assistant", "content": response})
+    # Generate & Display Assistant Response
+    response_content = generate_response(user_prompt)
+    st.session_state.messages.append({"role": "assistant", "content": response_content})
     with st.chat_message("assistant"):
-        st.markdown(response, unsafe_allow_html=True)
+        st.markdown(response_content, unsafe_allow_html=True)
