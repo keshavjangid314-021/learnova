@@ -1,262 +1,121 @@
 import streamlit as st
+import streamlit.components.v1 as components
 
-# 1. Page Configuration
-st.set_page_config(
-    page_title="Learnova | CBSE Class 12 Science AI",
-    page_icon="⚡",
-    layout="wide",
-    initial_sidebar_state="expanded"
+# Streamlit Page Config & Title Update
+st.set_page_config(page_title="ChitraVidya AI - 3D Interactive Tutor", layout="wide")
+
+st.title("🎨 ChitraVidya AI — 3D Interactive Science & Maths Tutor")
+st.caption("Visual, Interactive & Real-time 3D Simulations for CBSE Class 11 & 12")
+
+# Sidebar Menu (Purane Topics + Naye Topics)
+selected_topic = st.sidebar.selectbox(
+    "Choose Chapter / Module",
+    [
+        "Physics: Solenoid & Electromagnetism",
+        "Physics: Faraday's Law of Induction",
+        "Physics: Kirchhoff's Laws (KCL & KVL)",
+        "Physics: Electromagnetic Waves (Class 12)",
+        "Chemistry: pH Scale & Solutions",
+        "Chemistry: VSEPR Theory & Molecular Geometry",
+        "Maths: 3D Geometry & Vectors (Class 12 CBSE)"
+    ]
 )
 
-# 2. Custom CSS Styling & Cleanup
-st.markdown("""
-<style>
-#MainMenu {visibility: hidden;}
-footer {visibility: hidden;}
-header {visibility: hidden;}
+# ====================================================================
+# 1. PURANI SAVED TOPICS (SAVED AS IT IS)
+# ====================================================================
 
-div[class*="viewerBadge"], 
-div[class*="styles_viewerBadge"],
-button[title*="Streamlit Community Cloud"],
-.stAppViewerBadge,
-iframe[src*="accessibility"],
-div[aria-label="Streamlit status"] {
-    display: none !important;
-    visibility: hidden !important;
-}
+if selected_topic == "Physics: Solenoid & Electromagnetism":
+    st.header("🧲 Physics: Solenoid & Magnetic Field")
+    st.write("Solenoid ke 3D magnetic field pattern aur current flow ko interactive feel karein.")
+    components.html(
+        '<iframe src="https://phet.colorado.edu/sims/html/faradays-law/latest/faradays-law_en.html" width="100%" height="600" allowfullscreen style="border:none; border-radius:10px;"></iframe>',
+        height=620
+    )
 
-/* Crop PhET External Links at the bottom */
-.sim-container {
-    position: relative;
-    width: 100%;
-    height: 480px;
-    overflow: hidden;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
+elif selected_topic == "Physics: Faraday's Law of Induction":
+    st.header("⚡ Physics: Faraday's Law of Electromagnetic Induction")
+    st.write("Magnet movement aur induced emf/current ko live experiment karke dekhein.")
+    components.html(
+        '<iframe src="https://phet.colorado.edu/sims/html/faradays-law/latest/faradays-law_en.html" width="100%" height="600" allowfullscreen style="border:none; border-radius:10px;"></iframe>',
+        height=620
+    )
 
-.sim-container iframe {
-    width: 100%;
-    height: 530px;
-    border: none;
-    margin-top: -5px;
-}
-</style>
-""", unsafe_allow_html=True)
+elif selected_topic == "Physics: Kirchhoff's Laws (KCL & KVL)":
+    st.header("🔌 Physics: Kirchhoff's Current & Voltage Laws")
+    st.write("DC Circuit Virtual Lab: Resistors, Battery, aur Wires laga kar KCL aur KVL verify karein.")
+    components.html(
+        '<iframe src="https://phet.colorado.edu/sims/html/circuit-construction-kit-dc/latest/circuit-construction-kit-dc_en.html" width="100%" height="600" allowfullscreen style="border:none; border-radius:10px;"></iframe>',
+        height=620
+    )
 
-# 3. Session State Initialization
-if "messages" not in st.session_state:
-    st.session_state.messages = []
+elif selected_topic == "Chemistry: pH Scale & Solutions":
+    st.header("🧪 Chemistry: pH Scale & Solutions")
+    st.write("Acids, bases aur neutral liquids ke pH value ko measure aur test karein.")
+    components.html(
+        '<iframe src="https://phet.colorado.edu/sims/html/ph-scale/latest/ph-scale_en.html" width="100%" height="600" allowfullscreen style="border:none; border-radius:10px;"></iframe>',
+        height=620
+    )
 
-# 4. Sidebar History Setup
-with st.sidebar:
-    st.title("💬 Chat History")
-    if st.button("➕ New Chat"):
-        st.session_state.messages = []
-        st.rerun()
-    st.markdown("---")
-    for msg in st.session_state.messages:
-        if msg["role"] == "user":
-            st.caption(f"📌 {msg['content'][:25]}...")
+elif selected_topic == "Chemistry: VSEPR Theory & Molecular Geometry":
+    st.header("⚛️ Chemistry: VSEPR Theory & Molecular Shapes")
+    st.write("Molecules ke 3D bond angles, lone pairs, aur molecular shapes ko rotate karke dekhein.")
+    components.html(
+        '<iframe src="https://phet.colorado.edu/sims/html/molecule-shapes/latest/molecule-shapes_en.html" width="100%" height="600" allowfullscreen style="border:none; border-radius:10px;"></iframe>',
+        height=620
+    )
 
-# 5. Main UI Title
-st.title("⚡ Learnova Science AI Tutor")
-st.caption("CBSE Class 11 & 12 Interactive Science Assistant with Virtual 3D Labs")
+# ====================================================================
+# 2. NAYA TOPIC: PHYSICS CLASS 12 - ELECTROMAGNETIC WAVES
+# ====================================================================
 
-# 6. Welcome Banner
-if len(st.session_state.messages) == 0:
-    st.info("""
-    👋 **Welcome to Learnova Science AI!** You can ask questions and explore interactive 3D simulations on the following topics:
-
-    * **Physics Topics:**
-      * 🧲 **Solenoid & Electromagnetism** (*"What is solenoid?"* / *"How does solenoid work?"*)
-      * ⚡ **Electromagnetic Induction** (*"Explain Electromagnetic Induction"* / *"Faraday's Law"*)
-      * 🔋 **Circuit Construction** (*"Explain Electric Circuit"* / *"Ohm's Law & Circuits"*)
-      * ⚡ **Kirchhoff's Laws** (*"Explain Kirchhoff's Laws"* / *"KCL and KVL"*)
-      * ⚛️ **Charges and Fields** (*"What is Coulomb's Law?"* / *"Electric Charges and Fields"*)
-      * 🌊 **Huygens' Principle**
-
-    * **Chemistry Topics:**
-      * 🧪 **pH Scale, Acids & Bases** (*"What is pH scale?"* / *"Explain Acid and Base"*)
-      * 💎 **Molecule Shapes & VSEPR** (*"What are molecule shapes?"* / *"VSEPR Theory"*)
-    """)
-
-# 7. Render Active Chat Messages
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"], unsafe_allow_html=True)
-
-# 8. Smart Intent-Based Response Generator
-def generate_response(prompt):
-    text = prompt.lower().strip()
+elif selected_topic == "Physics: Electromagnetic Waves (Class 12)":
+    st.header("📡 Class 12 Physics: Electromagnetic Waves")
     
-    # --- Solenoid ---
-    if "solenoid" in text:
-        if "what" in text or "define" in text or "definition" in text:
-            return """
-### 🧲 What is a Solenoid?
+    with st.expander("📌 Topic Index & Sawal Kaise Puchein (Interactive Guide)", expanded=True):
+        st.markdown("""
+        * **1. Transverse Nature of EM Waves (Electric $\\vec{E}$ & Magnetic $\\vec{B}$ Vectors):**
+          * *Simulation:* 3D Oscillating Electric and Magnetic fields perpendicular to each other.
+          * *Sawal Kaise Puchein:* *"Show the phase difference and angle between electric and magnetic field vectors in EM waves."*
+        * **2. Electromagnetic Spectrum Visualization:**
+          * *Simulation:* Interactive band slider showing Radio waves, Microwaves, Infrared, Visible, UV, X-rays & Gamma rays.
+          * *Sawal Kaise Puchein:* *"Compare the frequency, wavelength, and energy of Microwaves vs X-rays visually."*
+        * **3. Displacement Current & Maxwell's Equations:**
+          * *Simulation:* 3D Capacitor charging circuit showing magnetic field lines generated between plates due to $I_d$.
+          * *Sawal Kaise Puchein:* *"Demonstrate displacement current density during capacitor charging using Maxwell's 4th equation."*
+        """)
 
-A **solenoid** is a long helical coil of insulated copper wire wound tightly around a cylindrical frame. When current flows through it, it produces a uniform magnetic field inside its core, behaving like a bar magnet.
+    st.subheader("🖥️ Interactive EM Waves 3D Simulation")
+    components.html(
+        '<iframe src="https://phet.colorado.edu/sims/html/wave-interference/latest/wave-interference_en.html" width="100%" height="600" allowfullscreen style="border:none; border-radius:10px;"></iframe>',
+        height=620
+    )
 
-* **Formula:** $B = \\mu_0 n I$
-  * $\\mu_0$ = Permeability of free space ($4\\pi \\times 10^{-7} \\text{ T}\\cdot\\text{m/A}$)
-  * $n$ = Turns per unit length ($N/L$)
-  * $I$ = Current in Amperes
-* **Key Feature:** Magnetic field inside is **strong and uniform**, while outside it is nearly **zero**.
-"""
-        else:
-            return """
-### ⚙️ How a Solenoid Works (Working Mechanism)
+# ====================================================================
+# 3. NAYA TOPIC: MATHEMATICS CLASS 12 CBSE (3D & VECTORS)
+# ====================================================================
 
-1. **Magnetic Field Generation:** Direct current (DC) flowing through each loop generates a magnetic field around the wire via the Right-Hand Thumb Rule.
-2. **Field Alignment:** Individual circular fields sum up along the central axis of the cylinder to form a strong, directional magnetic field line.
-3. **Polarity:** Clockwise current side = **South Pole** | Anti-clockwise current side = **North Pole**
+elif selected_topic == "Maths: 3D Geometry & Vectors (Class 12 CBSE)":
+    st.header("📐 Class 12 CBSE Maths: 3D Geometry & Visualizer")
+    
+    with st.expander("📌 Topic Index & Sawal Kaise Puchein (Interactive Guide)", expanded=True):
+        st.markdown("""
+        * **1. 3D Geometry (Lines, Skew Lines & Planes in Space):**
+          * *Simulation:* 3D coordinate space showing shortest distance vector between two skew lines and intersection of planes.
+          * *Sawal Kaise Puchein:* *"Show the shortest distance line vector between two skew lines in 3D space."*
+        * **2. Vectors & Cross Product Direction:**
+          * *Simulation:* Interactive 3D vectors with Right-Hand Thumb Rule for $\\vec{a} \\times \\vec{b}$.
+          * *Sawal Kaise Puchein:* *"Demonstrate dot product projection of vector $\\vec{A}$ on $\\vec{B}$ in 3D."*
+        * **3. Application of Integrals (3D Solids of Revolution):**
+          * *Simulation:* 2D bounded region rotating in 3D space to form a paraboloid/cone solid.
+          * *Sawal Kaise Puchein:* *"Rotate curve $y = \\sqrt{x}$ about X-axis to generate a 3D paraboloid solid."*
+        * **4. Linear Programming Problem (3D Feasible Region):**
+          * *Simulation:* Bounded 3D convex polygon formed by multiple plane constraint equations.
+          * *Sawal Kaise Puchein:* *"Highlight the corner points of the feasible region for optimizing objective function Z."*
+        """)
 
----
-### 🔬 Interactive 3D Magnets & Electromagnet Simulation
-<div class="sim-container">
-    <iframe src="https://phet.colorado.edu/sims/html/magnets-and-electromagnets/latest/magnets-and-electromagnets_all.html"></iframe>
-</div>
-"""
-
-    # --- Kirchhoff's Laws ---
-    elif "kirchhoff" in text or "kcl" in text or "kvl" in text or "junction rule" in text or "loop rule" in text:
-        return """
-### ⚡ Kirchhoff's Circuit Laws
-
-Kirchhoff's laws are fundamental rules used to analyze complex electrical circuits:
-
-1. **Kirchhoff's Current Law (KCL / Junction Rule):**
-   * **Statement:** The algebraic sum of all electric currents meeting at any junction in an electrical circuit is zero.
-   * **Formula:** $$\\sum I = 0$$
-   * **Law:** Based on the **Law of Conservation of Charge**.
-
-2. **Kirchhoff's Voltage Law (KVL / Loop Rule):**
-   * **Statement:** The algebraic sum of all potential differences (EMFs and voltage drops across resistors) in any closed loop of a circuit is zero.
-   * **Formula:** $$\\sum V = 0 \\quad \\text{or} \\quad \\sum \\mathcal{E} = \\sum I R$$
-   * **Law:** Based on the **Law of Conservation of Energy**.
-
----
-### 🔬 Interactive Circuit Construction Lab (Test KCL & KVL)
-<div class="sim-container">
-    <iframe src="https://phet.colorado.edu/sims/html/circuit-construction-kit-dc/latest/circuit-construction-kit-dc_all.html"></iframe>
-</div>
-"""
-
-    # --- Electromagnetic Induction ---
-    elif "induction" in text or "faraday" in text or "emi" in text:
-        return """
-### ⚡ Electromagnetic Induction (Faraday's Law)
-
-**Electromagnetic Induction** is the process of generating an electromotive force (EMF) or current in a conductor by changing the magnetic flux linked with the circuit.
-
-* **Faraday's Law Formula:** 
-  $$\\mathcal{E} = -N \\frac{d\\Phi_B}{dt}$$
-  *(The negative sign represents **Lenz's Law**, which states that induced current opposes the change in flux causing it).*
-
----
-### 🔬 Interactive 3D Lab: Electromagnetic Induction
-<div class="sim-container">
-    <iframe src="https://phet.colorado.edu/sims/html/faradays-law/latest/faradays-law_all.html"></iframe>
-</div>
-"""
-
-    # --- Circuit Construction Kit ---
-    elif "circuit" in text or "ohm" in text or "resistor" in text:
-        return """
-### 🔋 Circuit Construction & Electrical Laws
-
-* **Ohm's Law:** $V = I R$ (Potential difference is directly proportional to current).
-* **Series Circuit:** Total resistance $R_{eq} = R_1 + R_2 + R_3$. Current remains same across all components.
-* **Parallel Circuit:** Total resistance $\\frac{1}{R_{eq}} = \\frac{1}{R_1} + \\frac{1}{R_2} + \\frac{1}{R_3}$. Voltage remains same across branches.
-
----
-### 🔬 Interactive Virtual Circuit Lab
-<div class="sim-container">
-    <iframe src="https://phet.colorado.edu/sims/html/circuit-construction-kit-dc/latest/circuit-construction-kit-dc_all.html"></iframe>
-</div>
-"""
-
-    # --- Charges and Fields ---
-    elif "charge" in text or "coulomb" in text or "electric field" in text:
-        return """
-### ⚛️ Electric Charges and Fields
-
-* **Coulomb's Law:** The electrostatic force between two point charges is given by:
-  $$F = k \\frac{|q_1 q_2|}{r^2}$$
-* **Electric Field ($E$):** Force per unit charge ($E = \\frac{F}{q}$). Field lines originate from positive charges and terminate at negative charges.
-
----
-### 🔬 Interactive Charges & Field Simulation
-<div class="sim-container">
-    <iframe src="https://phet.colorado.edu/sims/html/charges-and-fields/latest/charges-and-fields_all.html"></iframe>
-</div>
-"""
-
-    # --- Huygens Principle ---
-    elif "huygen" in text or "wavefront" in text:
-        return """
-### 🌊 Huygens' Principle
-Every point on a primary wavefront acts as a fresh source of secondary wavelets, spreading out in all directions with the speed of light in that medium.
-"""
-
-    # --- pH Scale, Acid & Base ---
-    elif "ph" in text or "acid" in text or "base" in text:
-        return """
-### 🧪 pH Scale, Acids & Bases
-
-* **pH Scale Definition:** A logarithmic scale used to measure the hydrogen ion concentration $[H^+]$ of a solution:
-  $$\\text{pH} = -\\log_{10}[H^+]$$
-* **Values:**
-  * **pH < 7:** Acidic
-  * **pH = 7:** Neutral
-  * **pH > 7:** Basic / Alkaline
-
----
-### 🔬 Interactive pH Scale Virtual Lab
-<div class="sim-container">
-    <iframe src="https://phet.colorado.edu/sims/html/ph-scale/latest/ph-scale_all.html"></iframe>
-</div>
-"""
-
-    # --- Molecule Shapes & VSEPR ---
-    elif "molecule" in text or "vsepr" in text or "shape" in text or "geometry" in text:
-        return """
-### 💎 Molecule Shapes & VSEPR Theory
-
-**VSEPR Theory** predicts 3D molecular geometry based on electron pair repulsion:
-
-* **Linear:** $180^\\circ$ (e.g., $\\text{CO}_2$)
-* **Trigonal Planar:** $120^\\circ$ (e.g., $\\text{BF}_3$)
-* **Tetrahedral:** $109.5^\\circ$ (e.g., $\\text{CH}_4$)
-
----
-### 🔬 Interactive 3D Molecule Shapes Simulator
-<div class="sim-container">
-    <iframe src="https://phet.colorado.edu/sims/html/molecule-shapes/latest/molecule-shapes_all.html"></iframe>
-</div>
-"""
-
-    # --- Fallback ---
-    else:
-        return f"""
-I received your query: **"{prompt}"**
-
-Try asking:
-* *"What is a solenoid?"* or *"How does a solenoid work?"*
-* *"Explain Kirchhoff's Laws"*
-* *"Explain Electromagnetic Induction"*
-* *"What is pH scale?"*
-* *"Explain Molecule Shapes VSEPR Theory"*
-"""
-
-# 9. User Input Handling
-if user_prompt := st.chat_input("Ask Learnova Science AI..."):
-    st.session_state.messages.append({"role": "user", "content": user_prompt})
-    with st.chat_message("user"):
-        st.markdown(user_prompt)
-
-    response = generate_response(user_prompt)
-    st.session_state.messages.append({"role": "assistant", "content": response})
-    with st.chat_message("assistant"):
-        st.markdown(response, unsafe_allow_html=True)
+    st.subheader("🖥️ Interactive 3D Math & Geometry Canvas")
+    components.html(
+        '<iframe src="https://www.geogebra.org/3d?embed" width="100%" height="600" allowfullscreen style="border:none; border-radius:10px;"></iframe>',
+        height=620
+    )
