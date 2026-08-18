@@ -2,8 +2,8 @@ import streamlit as st
 
 # 1. Page Configuration
 st.set_page_config(
-    page_title="Learnova | CBSE Class 12 Science AI",
-    page_icon="⚡",
+    page_title="ChitraVidya | CBSE Class 12 Science & Maths AI",
+    page_icon="🎨",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -25,11 +25,11 @@ div[aria-label="Streamlit status"] {
     visibility: hidden !important;
 }
 
-/* Crop PhET External Links at the bottom */
+/* Crop PhET & GeoGebra External Links at the bottom */
 .sim-container {
     position: relative;
     width: 100%;
-    height: 480px;
+    height: 520px;
     overflow: hidden;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -37,7 +37,7 @@ div[aria-label="Streamlit status"] {
 
 .sim-container iframe {
     width: 100%;
-    height: 530px;
+    height: 570px;
     border: none;
     margin-top: -5px;
 }
@@ -60,13 +60,13 @@ with st.sidebar:
             st.caption(f"📌 {msg['content'][:25]}...")
 
 # 5. Main UI Title
-st.title("⚡ Learnova Science AI Tutor")
-st.caption("CBSE Class 11 & 12 Interactive Science Assistant with Virtual 3D Labs")
+st.title("🎨 ChitraVidya AI Tutor")
+st.caption("CBSE Class 11 & 12 Interactive Science & Maths Assistant with Virtual 3D Labs")
 
 # 6. Welcome Banner
 if len(st.session_state.messages) == 0:
     st.info("""
-    👋 **Welcome to Learnova Science AI!** You can ask questions and explore interactive 3D simulations on the following topics:
+    👋 **Welcome to ChitraVidya AI!** You can ask questions and explore interactive 3D simulations on the following topics:
 
     * **Physics Topics:**
       * 🧲 **Solenoid & Electromagnetism** (*"What is solenoid?"* / *"How does solenoid work?"*)
@@ -75,10 +75,14 @@ if len(st.session_state.messages) == 0:
       * ⚡ **Kirchhoff's Laws** (*"Explain Kirchhoff's Laws"* / *"KCL and KVL"*)
       * ⚛️ **Charges and Fields** (*"What is Coulomb's Law?"* / *"Electric Charges and Fields"*)
       * 🌊 **Huygens' Principle**
+      * 📡 **EM Waves Class 12** (*"Explain EM Waves"* / *"What is displacement current?"*)
 
     * **Chemistry Topics:**
       * 🧪 **pH Scale, Acids & Bases** (*"What is pH scale?"* / *"Explain Acid and Base"*)
       * 💎 **Molecule Shapes & VSEPR** (*"What are molecule shapes?"* / *"VSEPR Theory"*)
+
+    * **Mathematics Topics (CBSE Class 12):**
+      * 📐 **3D Geometry & Vectors** (*"Explain 3D Geometry"* / *"What is Vector Cross Product?"*)
     """)
 
 # 7. Render Active Chat Messages
@@ -237,6 +241,54 @@ Every point on a primary wavefront acts as a fresh source of secondary wavelets,
 </div>
 """
 
+    # --- NEW ADDITION 1: EM Waves (Physics Class 12) ---
+    elif "em wave" in text or "electromagnetic wave" in text or "spectrum" in text or "displacement current" in text or "maxwell" in text:
+        return """
+### 📡 Physics Class 12: Electromagnetic Waves (3D Visualizer)
+
+Electromagnetic waves consist of sinusoidal oscillating electric ($\vec{E}$) and magnetic ($\vec{B}$) fields perpendicular to each other and to the direction of wave propagation.
+
+#### 📌 Topic Index & Sample Questions Guide:
+* **Topic 1: Transverse Nature of EM Waves**
+  * *Sawal Kaise Puchein:* *"Show the phase difference between $\vec{E}$ and $\vec{B}$ vectors."*
+* **Topic 2: Displacement Current ($I_d$) & Maxwell's Equations**
+  * *Sawal Kaise Puchein:* *"Explain displacement current in capacitor charging using Maxwell's 4th equation."*
+* **Topic 3: Electromagnetic Spectrum**
+  * *Sawal Kaise Puchein:* *"Compare frequency and wavelength of Microwaves vs X-rays."*
+
+* **Key Equation:** $c = \\frac{1}{\\sqrt{\\mu_0 \\varepsilon_0}} = \\frac{E_0}{B_0}$
+
+---
+### 🔬 Interactive 3D EM Wave & Wave Interference Simulation
+<div class="sim-container">
+    <iframe src="https://phet.colorado.edu/sims/html/wave-interference/latest/wave-interference_en.html"></iframe>
+</div>
+"""
+
+    # --- NEW ADDITION 2: Mathematics Class 12 CBSE (3D & Vectors) ---
+    elif "math" in text or "3d" in text or "vector" in text or "skew line" in text or "plane" in text or "integral" in text:
+        return """
+### 📐 Mathematics Class 12 CBSE: 3D Geometry & Vector Visualizer
+
+Visualize vectors, 3D line equations, planes, and solids of revolution interactively.
+
+#### 📌 Topic Index & Sample Questions Guide:
+* **Topic 1: 3D Geometry (Lines & Planes in Space)**
+  * *Sawal Kaise Puchein:* *"Show the shortest distance vector between two skew lines in 3D."*
+* **Topic 2: Vectors & Cross Product Direction**
+  * *Sawal Kaise Puchein:* *"Demonstrate dot product projection of vector $\\vec{A}$ on $\\vec{B}$."*
+* **Topic 3: Application of Integrals (3D Solid Generation)**
+  * *Sawal Kaise Puchein:* *"Rotate curve $y = \\sqrt{x}$ about X-axis to generate a 3D paraboloid."*
+* **Topic 4: Linear Programming Problem (3D Feasible Region)**
+  * *Sawal Kaise Puchein:* *"Highlight corner points of the 3D feasible region for optimization."*
+
+---
+### 🔬 Interactive 3D Math Canvas (GeoGebra 3D Engine)
+<div class="sim-container">
+    <iframe src="https://www.geogebra.org/3d?embed"></iframe>
+</div>
+"""
+
     # --- Fallback ---
     else:
         return f"""
@@ -248,10 +300,12 @@ Try asking:
 * *"Explain Electromagnetic Induction"*
 * *"What is pH scale?"*
 * *"Explain Molecule Shapes VSEPR Theory"*
+* *"Explain EM Waves"* or *"What is displacement current?"*
+* *"Explain 3D Geometry"* or *"Show Vector Cross Product"*
 """
 
 # 9. User Input Handling
-if user_prompt := st.chat_input("Ask Learnova Science AI..."):
+if user_prompt := st.chat_input("Ask ChitraVidya AI..."):
     st.session_state.messages.append({"role": "user", "content": user_prompt})
     with st.chat_message("user"):
         st.markdown(user_prompt)
