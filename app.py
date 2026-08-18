@@ -1,14 +1,14 @@
 import streamlit as st
 
-# 1. Page Configuration (ChatGPT/Modern AI Style Icon)
+# 1. Page Configuration
 st.set_page_config(
-    page_title="ChitraVidya | CBSE Class 12 AI Visualizer",
+    page_title="ChitraVidya | CBSE Science & Maths AI Visualizer",
     page_icon="✨",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# 2. Custom CSS Styling (ChatGPT-like Modern Dark/Light Design)
+# 2. Custom CSS Styling & Cleanup
 st.markdown("""
 <style>
 /* Hide Default Streamlit Elements */
@@ -54,7 +54,7 @@ div[aria-label="Streamlit status"] {
 </style>
 """, unsafe_allow_html=True)
 
-# Custom Avatars (Professional AI & User Icons)
+# Custom Avatars (AI & User Icons)
 AI_AVATAR = "https://api.iconify.design/lucide:sparkles.svg?color=%2310a37f"
 USER_AVATAR = "https://api.iconify.design/lucide:user.svg?color=%236b7280"
 
@@ -75,16 +75,28 @@ with st.sidebar:
 
 # 5. Main Title Section
 st.title("✨ ChitraVidya AI")
-st.caption("Professional 3D Interactive Science & Maths Learning Assistant for CBSE Class 11 & 12")
+st.caption("3D Interactive Science & Maths Learning Assistant for CBSE Class 12")
 
-# 6. Welcome Banner
+# 6. Welcome Banner with PCM Sample Questions
 if len(st.session_state.messages) == 0:
     st.info("""
-    👋 **Welcome to ChitraVidya AI!** Ask questions or explore 3D visual models:
+    👋 **Welcome to ChitraVidya AI!** Ask questions or explore 3D visual models across PCM topics:
 
-    * **⚡ Physics:** Solenoid, Faraday's Law, Kirchhoff's Laws, Circuit Construction, Charges & Fields, EM Waves (Class 12).
-    * **🧪 Chemistry:** pH Scale, Acids & Bases, VSEPR Theory & 3D Molecular Shapes.
-    * **📐 Mathematics:** 3D Geometry, Vectors & Cross Product Visualizer (Class 12 CBSE).
+    * **⚡ Physics:**
+      * 🧲 **Solenoid & Electromagnetism:** *"What is solenoid?"* | *"How does a solenoid work?"*
+      * ⚡ **Electromagnetic Induction:** *"Explain Electromagnetic Induction"* | *"State Faraday's Law"*
+      * 🔋 **Circuit Construction:** *"Explain Electric Circuit"* | *"What is Ohm's Law?"*
+      * ⚡ **Kirchhoff's Laws:** *"Explain Kirchhoff's Laws"* | *"What is KCL and KVL?"*
+      * ⚛️ **Charges and Fields:** *"What is Coulomb's Law?"* | *"Explain Electric Field Lines"*
+      * 🌊 **Wave Optics:** *"Explain Huygens' Principle"*
+      * 📡 **EM Waves (Class 12):** *"Explain EM Waves"* | *"What is displacement current?"* | *"Show Maxwell's Equations"*
+
+    * **🧪 Chemistry:**
+      * 🧪 **pH Scale, Acids & Bases:** *"What is pH scale?"* | *"Explain Acid and Base strength"*
+      * 💎 **Molecule Shapes & VSEPR:** *"What are molecule shapes?"* | *"Explain VSEPR Theory"*
+
+    * **📐 Mathematics:**
+      * 📐 **3D Geometry & Vectors (Class 12 CBSE):** *"Explain 3D Geometry"* | *"Show Vector Cross Product"* | *"Find shortest distance between skew lines"*
     """)
 
 # 7. Render Chat History with Custom Avatars
